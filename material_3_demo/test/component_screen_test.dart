@@ -7,6 +7,7 @@ import 'package:material_3_demo/main.dart';
 void main() {
   testWidgets('Default main page shows all M3 components',
       (WidgetTester tester) async {
+    widgetSetup(tester, 450, windowHeight: 2000);
     await tester.pumpWidget(const Material3Demo());
 
     // Elements on the app bar
@@ -26,18 +27,20 @@ void main() {
     expect(find.widgetWithText(TextButton, "Text"), findsNWidgets(2));
     expect(find.text("Icon"), findsNWidgets(5));
 
+    // IconButtons
+    expect(find.widgetWithIcon(IconButton, Icons.settings_outlined),
+        findsNWidgets(8));
+
     // FABs
-    Finder floatingActionButton = find.text("Create");
-    await tester.scrollUntilVisible(
-      floatingActionButton,
-      500.0,
-    );
     expect(
         find.widgetWithIcon(FloatingActionButton, Icons.add), findsNWidgets(4));
     expect(find.widgetWithText(FloatingActionButton, "Create"), findsOneWidget);
 
-    // IconButtons
-    expect(find.widgetWithIcon(IconButton, Icons.settings_outlined), findsNWidgets(8));
+    // Chips
+    expect(find.byType(ActionChip),
+        findsNWidgets(7)); // includes Assist and Suggestion chip.
+    expect(find.byType(FilterChip), findsNWidgets(4));
+    expect(find.byType(InputChip), findsNWidgets(4));
 
     // Cards
     expect(find.widgetWithText(Card, "Elevated"), findsOneWidget);
@@ -46,10 +49,6 @@ void main() {
 
     // Alert Dialog
     Finder dialogExample = find.widgetWithText(TextButton, "Open Dialog");
-    await tester.scrollUntilVisible(
-      dialogExample,
-      500.0,
-    );
     expect(dialogExample, findsOneWidget);
   });
 
@@ -111,35 +110,26 @@ void main() {
   testWidgets(
       'Material version switches between Material3 and Material2 when'
       'the version icon is clicked', (tester) async {
+    widgetSetup(tester, 450, windowHeight: 2000);
     await tester.pumpWidget(const Material3Demo());
     Finder m3Icon = find.widgetWithIcon(IconButton, Icons.filter_3);
     Finder m2Icon = find.widgetWithIcon(IconButton, Icons.filter_2);
     BuildContext defaultElevatedButton =
         tester.firstElement(find.byType(ElevatedButton));
     BuildContext defaultIconButton =
-    tester.firstElement(find.byType(IconButton));
+        tester.firstElement(find.byType(IconButton));
     BuildContext defaultFAB =
         tester.firstElement(find.byType(FloatingActionButton));
-    Finder card = find.widgetWithText(Card, "Elevated");
-    await tester.scrollUntilVisible(
-      card,
-      500.0,
-    );
-    BuildContext defaultCard = tester.firstElement(card);
+    BuildContext defaultCard =
+        tester.firstElement(find.widgetWithText(Card, "Elevated"));
+    BuildContext defaultChip =
+        tester.firstElement(find.widgetWithText(ActionChip, "Assist"));
     Finder dialog = find.text("Open Dialog");
-    await tester.scrollUntilVisible(
-      dialog,
-      500.0,
-    );
     await tester.tap(dialog);
     await tester.pumpAndSettle(const Duration(microseconds: 500));
     BuildContext defaultAlertDialog = tester.element(find.byType(AlertDialog));
     expect(Theme.of(defaultAlertDialog).useMaterial3, true);
     Finder dismiss = find.text("Dismiss");
-    await tester.scrollUntilVisible(
-      dismiss,
-      500.0,
-    );
     await tester.tap(dismiss);
     await tester.pumpAndSettle(const Duration(microseconds: 500));
 
@@ -150,30 +140,26 @@ void main() {
     expect(Theme.of(defaultIconButton).useMaterial3, true);
     expect(Theme.of(defaultFAB).useMaterial3, true);
     expect(Theme.of(defaultCard).useMaterial3, true);
+    expect(Theme.of(defaultChip).useMaterial3, true);
 
     await tester.tap(m3Icon);
     await tester.pumpAndSettle(const Duration(microseconds: 500));
     BuildContext updatedElevatedButton =
         tester.firstElement(find.byType(ElevatedButton));
-    BuildContext updatedIconButton = tester.firstElement(find.byType(IconButton));
+    BuildContext updatedIconButton =
+        tester.firstElement(find.byType(IconButton));
     BuildContext updatedFAB =
         tester.firstElement(find.byType(FloatingActionButton));
     BuildContext updatedCard = tester.firstElement(find.byType(Card));
+    BuildContext updatedChip =
+        tester.firstElement(find.widgetWithText(ActionChip, "Assist"));
     Finder updatedDialog = find.text("Open Dialog");
-    await tester.scrollUntilVisible(
-      updatedDialog,
-      500.0,
-    );
     await tester.tap(updatedDialog);
     await tester.pumpAndSettle(const Duration(microseconds: 500));
     BuildContext updatedAlertDialog =
         tester.firstElement(find.byType(AlertDialog));
     expect(Theme.of(updatedAlertDialog).useMaterial3, false);
     Finder updatedDismiss = find.text("Dismiss");
-    await tester.scrollUntilVisible(
-      updatedDismiss,
-      500.0,
-    );
     await tester.tap(updatedDismiss);
     await tester.pumpAndSettle(const Duration(microseconds: 500));
 
@@ -184,6 +170,7 @@ void main() {
     expect(Theme.of(updatedIconButton).useMaterial3, false);
     expect(Theme.of(updatedFAB).useMaterial3, false);
     expect(Theme.of(updatedCard).useMaterial3, false);
+    expect(Theme.of(updatedChip).useMaterial3, false);
   });
 
   testWidgets(
@@ -258,9 +245,11 @@ void main() {
   });
 }
 
-void widgetSetup(WidgetTester tester, double width) {
-  const height = 846;
+void widgetSetup(WidgetTester tester, double windowWidth,
+    {double? windowHeight}) {
+  final height = windowHeight ?? 846;
   tester.binding.window.devicePixelRatioTestValue = (2);
   final dpi = tester.binding.window.devicePixelRatio;
-  tester.binding.window.physicalSizeTestValue = Size(width * dpi, height * dpi);
+  tester.binding.window.physicalSizeTestValue =
+      Size(windowWidth * dpi, height * dpi);
 }
