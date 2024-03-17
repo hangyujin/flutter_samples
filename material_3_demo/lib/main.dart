@@ -89,37 +89,58 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Material 3',
-      themeMode: themeMode,
-      theme: ThemeData(
-        colorSchemeSeed: colorSelectionMethod == ColorSelectionMethod.colorSeed
-            ? colorSelected.color
-            : null,
-        colorScheme: colorSelectionMethod == ColorSelectionMethod.image
-            ? imageColorScheme
-            : null,
-        useMaterial3: useMaterial3,
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        colorSchemeSeed: colorSelectionMethod == ColorSelectionMethod.colorSeed
-            ? colorSelected.color
-            : imageColorScheme!.primary,
-        useMaterial3: useMaterial3,
-        brightness: Brightness.dark,
-      ),
-      home: Home(
-        useLightMode: useLightMode,
-        useMaterial3: useMaterial3,
-        colorSelected: colorSelected,
-        imageSelected: imageSelected,
-        handleBrightnessChange: handleBrightnessChange,
-        handleMaterialVersionChange: handleMaterialVersionChange,
-        handleColorSelect: handleColorSelect,
-        handleImageSelect: handleImageSelect,
-        colorSelectionMethod: colorSelectionMethod,
-      ),
+      title: 'Flutter Demo',
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return secondRoute();
+  }
+
+  Widget secondRoute() {
+    return Scaffold(
+      body: Stack(children: [
+        CustomScrollView(
+          cacheExtent: 9999,
+          slivers: [
+            SliverAppBar(
+             // floating: true,
+             // pinned: true,
+              actions: [],
+              title: Text('Action ', textScaler: const TextScaler.linear(5)),
+            ),
+
+            //Text('Action '),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                    color: index.isOdd ? Colors.white : Colors.black12,
+                    height: 422.0,
+                    child: Center(
+                      child: Text('$index',
+                          textScaler: const TextScaler.linear(5)),
+                    ),
+                  );
+                },
+                childCount: 5,
+              ),
+            ),
+          ],
+        ),
+      ]),
     );
   }
 }

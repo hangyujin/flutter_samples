@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)"
+options: "9a1a92567da5ba281853eeb8aa848932366c22d4c906cd6a3183548b7eafb970"
+build_start_time: [1662624457, 343816041]
+build_end_time: [1662624465, 570271015]
+inputs:
+  "/Users/jinhangyu/Documents/GitHub/flutter_samples/experimental/material_3_demo/macos/Flutter/GeneratedPluginRegistrant.swift": [1662624429, 4775524]
+  "/Users/jinhangyu/Documents/GitHub/flutter_samples/experimental/material_3_demo/macos/Runner/AppDelegate.swift": [1660556020, 814522027]
+  "/Users/jinhangyu/Documents/GitHub/flutter_samples/experimental/material_3_demo/macos/Runner/MainFlutterWindow.swift": [1660556020, 819755554]
